@@ -71,7 +71,7 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
      
         let c = currencies[indexPath.row]
-        let bal = balance[c]!
+        let bal = balance[c] ?? 0
         
         let maxSize = CGSize(width: CGFloat.greatestFiniteMagnitude, height: 22)
         let attrib : [NSAttributedString.Key : Any] = [kCTFontAttributeName as NSAttributedString.Key: UIFont.systemFont(ofSize: 17)]
