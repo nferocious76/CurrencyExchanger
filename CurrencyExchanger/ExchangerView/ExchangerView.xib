@@ -47,6 +47,9 @@
                 </imageView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xr4-oQ-RJA">
                     <rect key="frame" x="356" y="0.0" width="58" height="56"/>
+                    <connections>
+                        <action selector="dropdownButton:" destination="TWM-s3-3ly" eventType="touchUpInside" id="JsB-hb-EJ6"/>
+                    </connections>
                 </button>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nfE-OP-XUb">
                     <rect key="frame" x="56" y="55" width="358" height="1"/>
@@ -87,7 +90,7 @@
             <viewLayoutGuide key="safeArea" id="SDQ-F8-yFr"/>
             <connections>
                 <outlet property="currencyLbl" destination="tnG-lX-g8K" id="VOk-ND-y35"/>
-                <outlet property="dropdownButtonPlaceholder" destination="xr4-oQ-RJA" id="6kP-AV-EGW"/>
+                <outlet property="dropdownButton" destination="xr4-oQ-RJA" id="32N-Hl-kRy"/>
                 <outlet property="dropdownIconView" destination="upG-pZ-GVm" id="zT8-BZ-07Z"/>
                 <outlet property="iconView" destination="Ni1-8K-QM6" id="fTz-Sg-esL"/>
                 <outlet property="inputTF" destination="02a-cV-Ko4" id="Diq-8m-5KC"/>

@@ -89,6 +89,17 @@
                                     <constraint firstAttribute="height" constant="216" id="BBw-5W-4Ej"/>
                                 </constraints>
                             </pickerView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="q9M-Yr-Eev">
+                                <rect key="frame" x="40" y="390" width="334" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="9Pt-6H-FGR"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <state key="normal" title="SUBMIT"/>
+                                <connections>
+                                    <action selector="submit:" destination="8S3-u3-MHw" eventType="touchUpInside" id="9Wa-gY-OvF"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
@@ -104,21 +115,25 @@
                             <constraint firstItem="kic-Mp-x8W" firstAttribute="trailing" secondItem="GnZ-Ej-dxH" secondAttribute="trailing" id="QKQ-Z8-ds0"/>
                             <constraint firstItem="P1e-ou-9Cg" firstAttribute="top" secondItem="6bd-4b-Hfy" secondAttribute="bottom" constant="8" id="XZT-HX-uLr"/>
                             <constraint firstItem="GnZ-Ej-dxH" firstAttribute="trailing" secondItem="Seg-Ru-JuF" secondAttribute="trailing" constant="8" id="XbO-C2-5n2"/>
+                            <constraint firstItem="GnZ-Ej-dxH" firstAttribute="trailing" secondItem="q9M-Yr-Eev" secondAttribute="trailing" constant="40" id="Yhm-Xz-iiG"/>
                             <constraint firstItem="ttO-mi-qhP" firstAttribute="top" secondItem="Seg-Ru-JuF" secondAttribute="bottom" constant="8" id="goV-ji-XVO"/>
                             <constraint firstItem="kic-Mp-x8W" firstAttribute="leading" secondItem="GnZ-Ej-dxH" secondAttribute="leading" id="kzz-c2-kGS"/>
                             <constraint firstItem="kpc-0j-HWN" firstAttribute="trailing" secondItem="GnZ-Ej-dxH" secondAttribute="trailing" id="oQp-Cn-086"/>
                             <constraint firstItem="P1e-ou-9Cg" firstAttribute="leading" secondItem="GnZ-Ej-dxH" secondAttribute="leading" id="t0w-HB-iLa"/>
                             <constraint firstItem="ttO-mi-qhP" firstAttribute="leading" secondItem="GnZ-Ej-dxH" secondAttribute="leading" id="t34-Nn-YmF"/>
+                            <constraint firstItem="q9M-Yr-Eev" firstAttribute="top" secondItem="kic-Mp-x8W" secondAttribute="bottom" constant="40" id="vO2-8n-Kyx"/>
                             <constraint firstItem="kpc-0j-HWN" firstAttribute="leading" secondItem="GnZ-Ej-dxH" secondAttribute="leading" id="vtY-5D-vTo"/>
+                            <constraint firstItem="q9M-Yr-Eev" firstAttribute="leading" secondItem="GnZ-Ej-dxH" secondAttribute="leading" constant="40" id="zdR-qr-nKF"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="GnZ-Ej-dxH"/>
                     </view>
                     <navigationItem key="navigationItem" title="Currency Converter" id="uKm-LZ-w3c"/>
                     <connections>
                         <outlet property="collectionView" destination="ttO-mi-qhP" id="IoT-BM-ytf"/>
-                        <outlet property="pickerView" destination="kpc-0j-HWN" id="vNW-Wi-ztY"/>
+                        <outlet property="pickerView" destination="kpc-0j-HWN" id="jVF-TU-SSb"/>
                         <outlet property="receiveiew" destination="kic-Mp-x8W" id="aeu-S2-01T"/>
                         <outlet property="sellView" destination="P1e-ou-9Cg" id="3Qy-KJ-IXA"/>
+                        <outlet property="submitButton" destination="q9M-Yr-Eev" id="fAR-yS-IRe"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5YK-1U-w7k" sceneMemberID="firstResponder"/>

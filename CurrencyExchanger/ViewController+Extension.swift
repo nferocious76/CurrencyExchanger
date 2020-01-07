@@ -19,15 +19,18 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, 
                 if let obj = data.result.value as? [String: AnyObject] {
                     if let b = obj["base"] as? String {
                         self.base = b
+                        
+                        self.sell.currency = b
+                        self.receive.currency = b
                     }
                     
                     if let r = obj["rates"] as? [String: NSNumber] {
                         self.rates = r
         
-                        self.currencies = [[self.base: 1000]] // reset rate
+                        self.balance = [self.base: 1000] // reset rate
                         
                         for (key, value) in r {
-                            self.currencies.append([key: value.floatValue])
+                            self.balance[key] = value.floatValue
                         }
                     }
                 }
@@ -55,11 +58,12 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, 
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
      
-        let currency = currencies[indexPath.item]
+        let c = currencies[indexPath.row]
+        let bal = balance[c]!
         
         let maxSize = CGSize(width: CGFloat.greatestFiniteMagnitude, height: 22)
         let attrib : [NSAttributedString.Key : Any] = [kCTFontAttributeName as NSAttributedString.Key: UIFont.systemFont(ofSize: 17)]
-        let currencyLbl = "\(currency.values.first!) \(currency.keys.first!)"
+        let currencyLbl = "\(bal) \(c)"
         let boundingRect = currencyLbl.boundingRect(with: maxSize, options: .usesLineFragmentOrigin, attributes: attrib, context: nil)
         let maxWidth = boundingRect.size.width + 20
         
@@ -70,11 +74,19 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, 
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
      
-        let currency = currencies[indexPath.item]
+        let cur = currencies[indexPath.row]
+        let bal = balance[cur]!
         
         let c = cell as! CurrencyCVCell
-        c.balanceLbl.text = "\(currency.values.first!) \(currency.keys.first!)"
+        c.balanceLbl.text = "\(bal) \(cur)"
     }
     
+    func showAlert(title: String, message: String) {
+        
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Done", style: .default, handler: nil))
+        
+        present(alert, animated: true, completion: nil)
+    }
     
 }

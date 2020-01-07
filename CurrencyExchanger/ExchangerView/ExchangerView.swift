@@ -15,15 +15,14 @@ protocol ExchangerViewDelegate: AnyObject {
     func exchangerViewDidTapCurrency(view: ExchangerView)
 }
 
-class ExchangerView: UIView {
+class ExchangerView: UIView, UITextFieldDelegate {
 
     @IBOutlet weak var iconView: UIImageView!
     @IBOutlet weak var titleLbl: UILabel!
     @IBOutlet weak var inputTF: UITextField!
     @IBOutlet weak var currencyLbl: UILabel!
     @IBOutlet weak var dropdownIconView: UIImageView!
-    @IBOutlet weak var dropdownButtonPlaceholder: UIButton!
-    
+    @IBOutlet weak var dropdownButton: UIButton!
     @IBOutlet weak var separatorLineView: UIView!
     
     weak var delegate: ExchangerViewDelegate?
@@ -63,9 +62,16 @@ class ExchangerView: UIView {
         tool.items = [UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil), UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(ExchangerView.done))]
         
         inputTF.inputAccessoryView = tool
-        inputTF.text = "0"
+        inputTF.text = ""
+        inputTF.placeholder = "0"
         inputTF.keyboardType = .numberPad
+        inputTF.addTarget(self, action: #selector(ExchangerView.rateDidChange(field:)), for: .editingChanged)
         
+    }
+    
+    @objc func rateDidChange(field: UITextField) {
+        
+        delegate?.exchangerView(view: self, didChangeRate: field.text ?? "0", andCurrency: currencyLbl.text ?? "")
     }
     
     @objc func done() {
@@ -75,13 +81,31 @@ class ExchangerView: UIView {
         delegate?.exchangerView(view: self, didChangeRate: inputTF.text ?? "0", andCurrency: currencyLbl.text ?? "")
     }
     
+    @IBAction func dropdownButton(_ sender: UIButton) {
+        
+        delegate?.exchangerViewDidTapCurrency(view: self)
+    }
+    
+    // MARK: - UITextFieldDelegate
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        
+    }
+    
     // MARK: - Helper
     
-    func set(_ icon: UIImage?, iconBGColor: UIColor = .white, title: String) {
+    func setDisabled(input: Bool = true, currency: Bool = true) {
+        
+        inputTF.isEnabled = !input
+        dropdownButton.isEnabled = !currency
+    }
+    
+    func set(_ icon: UIImage?, iconBGColor: UIColor = .white, title: String, currency c: String = "") {
         
         iconView.image = icon
         iconView.backgroundColor = iconBGColor
         titleLbl.text = title
+        currencyLbl.text = c
     }
     
     var currency: String {
@@ -94,8 +118,11 @@ class ExchangerView: UIView {
     }
     
     var rate: String {
+        set (r) {
+            inputTF.text = r
+        }
         get {
-            return currencyLbl.text ?? ""
+            return inputTF.text ?? ""
         }
     }
     
