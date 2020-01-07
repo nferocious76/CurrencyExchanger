@@ -21,21 +21,28 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, 
                     if let b = obj["base"] as? String {
                         self.base = b
                         
-                        self.sell.currency = b
-                        self.receive.currency = b
+                        if self.isFirstLoad { // this is probably first load -- default value
+                            self.balance = [b: 1000] // reset rate
+
+                            self.sell.currency = b
+                            self.receive.currency = b
+                        }
                     }
                     
                     if let r = obj["rates"] as? [String: NSNumber] {
                         self.rates = r
-        
-                        self.balance = [self.base: 1000] // reset rate
-                        
+
                         for (key, _) in r {
                             self.currencies.append(key)
-                            self.balance[key] = 0
+                            
+                            if self.isFirstLoad {
+                                self.balance[key] = 0
+                            }
                         }
                     }
                 }
+                
+                self.isFirstLoad = false // prevent data reset on success update
             }
             
             DispatchQueue.main.async {

@@ -32,6 +32,7 @@ class ViewController: UIViewController, ExchangerViewDelegate, UIPickerViewDeleg
     var rates: [String: NSNumber] = [:]
     var currencies: [String] = ["EUR"]
     var exchangeCount: Int = 0 // commission fee: 0.7%
+    var isFirstLoad: Bool = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,6 +45,7 @@ class ViewController: UIViewController, ExchangerViewDelegate, UIPickerViewDeleg
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        // create polling every 5 seconds
         Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { _ in
             self.loadCurrency()
         }
