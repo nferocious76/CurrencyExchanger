@@ -87,7 +87,7 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, 
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
      
         let cur = currencies[indexPath.row]
-        let bal = balance[cur]!
+        let bal = balance[cur] ?? 0
         
         let c = cell as! CurrencyCVCell
         c.balanceLbl.text = "\(bal) \(cur)"
