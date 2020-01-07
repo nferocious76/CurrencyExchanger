@@ -38,19 +38,22 @@ class ViewController: UIViewController, ExchangerViewDelegate, UIPickerViewDeleg
         // Do any additional setup after loading the view.
         
         prepareUI()
+        loadCurrency()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        loadCurrency()
+        Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { _ in
+            self.loadCurrency()
+        }
 
 //        test
 //        balance = ["EUR": 1000, "USD": 0, "CAD": 0, "AUD": 0]
 //        rates = ["EUR": 1.4525, "USD": 137.3, "CAD": 0.85215, "AUD": 1.6119]
 //        currencies = ["EUR", "USD", "CAD", "AUD"]
         
-        collectionView.reloadData()
+//        collectionView.reloadData()
     }
 
     func prepareUI() {
@@ -82,6 +85,10 @@ class ViewController: UIViewController, ExchangerViewDelegate, UIPickerViewDeleg
         pickerView.delegate = self
         pickerView.dataSource = self
         pickerView.isHidden = true
+        
+        // refresh display
+        collectionView.reloadData()
+        pickerView.reloadAllComponents()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
