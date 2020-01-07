@@ -29,12 +29,15 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="0.00" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="02a-cV-Ko4">
-                    <rect key="frame" x="137" y="8" width="189" height="40"/>
+                    <rect key="frame" x="137" y="8" width="180" height="40"/>
                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                     <textInputTraits key="textInputTraits"/>
                 </textField>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="USD" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tnG-lX-g8K">
-                    <rect key="frame" x="356" y="8" width="31" height="40"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="USD" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tnG-lX-g8K">
+                    <rect key="frame" x="337" y="8" width="50" height="40"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="50" id="LDB-yb-D6n"/>
+                    </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
@@ -46,7 +49,7 @@
                     </constraints>
                 </imageView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xr4-oQ-RJA">
-                    <rect key="frame" x="356" y="0.0" width="58" height="56"/>
+                    <rect key="frame" x="337" y="0.0" width="77" height="56"/>
                     <connections>
                         <action selector="dropdownButton:" destination="TWM-s3-3ly" eventType="touchUpInside" id="JsB-hb-EJ6"/>
                     </connections>
@@ -81,7 +84,7 @@
                 <constraint firstItem="upG-pZ-GVm" firstAttribute="top" secondItem="TWM-s3-3ly" secondAttribute="top" constant="8" id="p87-te-gqR"/>
                 <constraint firstItem="YgF-fO-o4C" firstAttribute="top" secondItem="Ni1-8K-QM6" secondAttribute="top" id="tdB-4J-ahC"/>
                 <constraint firstAttribute="bottom" secondItem="Ni1-8K-QM6" secondAttribute="bottom" constant="8" id="uDi-xC-fpv"/>
-                <constraint firstItem="tnG-lX-g8K" firstAttribute="leading" secondItem="02a-cV-Ko4" secondAttribute="trailing" constant="30" id="vM5-l0-gnP"/>
+                <constraint firstItem="tnG-lX-g8K" firstAttribute="leading" secondItem="02a-cV-Ko4" secondAttribute="trailing" constant="20" id="vM5-l0-gnP"/>
                 <constraint firstAttribute="bottom" secondItem="nfE-OP-XUb" secondAttribute="bottom" id="w0B-1f-Y5H"/>
                 <constraint firstItem="xr4-oQ-RJA" firstAttribute="leading" secondItem="tnG-lX-g8K" secondAttribute="leading" id="wOl-gY-hGK"/>
                 <constraint firstItem="02a-cV-Ko4" firstAttribute="bottom" secondItem="YgF-fO-o4C" secondAttribute="bottom" id="y1l-oU-slu"/>

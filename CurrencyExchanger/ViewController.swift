@@ -31,6 +31,7 @@ class ViewController: UIViewController, ExchangerViewDelegate, UIPickerViewDeleg
     var base: String = "EUR"
     var rates: [String: NSNumber] = [:]
     var currencies: [String] = ["EUR"]
+    var exchangeCount: Int = 0 // commission fee: 0.7%
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,11 +43,12 @@ class ViewController: UIViewController, ExchangerViewDelegate, UIPickerViewDeleg
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-//        loadCurrency()
-        
-        balance = ["EUR": 1000, "USD": 0, "CAD": 0, "AUD": 0]
-        rates = ["EUR": 1.4525, "USD": 137.3, "CAD": 0.85215, "AUD": 1.6119]
-        currencies = ["EUR", "USD", "CAD", "AUD"]
+        loadCurrency()
+
+//        test
+//        balance = ["EUR": 1000, "USD": 0, "CAD": 0, "AUD": 0]
+//        rates = ["EUR": 1.4525, "USD": 137.3, "CAD": 0.85215, "AUD": 1.6119]
+//        currencies = ["EUR", "USD", "CAD", "AUD"]
         
         collectionView.reloadData()
     }
@@ -99,18 +101,18 @@ class ViewController: UIViewController, ExchangerViewDelegate, UIPickerViewDeleg
         }
         else{
             if let r = rates[receive.currency]?.floatValue {
-
+                exchangeCount += 1 // update exchange count
+                
                 guard let f = Float(sell.rate) else {
                     return showAlert(title: "Error", message: "Convertion failed")
                 }
                 
                 let converted = f * r
-                let message = "You have converted \(sell.rate) \(sell.currency) to \(converted) \(receive.currency)"
-                // You have converted 100.00 EUR to 110.00 USD. Commission Fee - 0.70 EUR.
+                let message = exchangeCount > 5 ? "You have converted \(sell.rate) \(sell.currency) to \(converted) \(receive.currency). Commission Fee - 0.70 EUR." : "You have converted \(sell.rate) \(sell.currency) to \(converted) \(receive.currency)"
                 
                 // update balance
                 let b = balance[sell.currency]!
-                let newBal = b - (Float(sell.rate) ?? 0)
+                let newBal = exchangeCount > 5 ? b - (f + f * 0.7) : b - f
                 balance[sell.currency] = newBal
                 
                 if let bal = balance[receive.currency] {
@@ -121,6 +123,7 @@ class ViewController: UIViewController, ExchangerViewDelegate, UIPickerViewDeleg
                 receive.rate = ""
                 
                 collectionView.reloadData()
+
                 return showAlert(title: "Currency Converted", message: message)
             }
         }
@@ -139,7 +142,7 @@ class ViewController: UIViewController, ExchangerViewDelegate, UIPickerViewDeleg
     }
     
     func exchangerViewDidTapCurrency(view: ExchangerView) {
-        
+        self.view.endEditing(true)
         activeExchange = view
         pickerView.isHidden = false
     }

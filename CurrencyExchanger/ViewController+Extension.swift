@@ -14,7 +14,8 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, 
     func loadCurrency() {
         
         Alamofire.request("https://api.exchangeratesapi.io/latest").responseJSON(completionHandler: { (data) in
-          
+            print(data)
+            
             if data.result.isSuccess {
                 if let obj = data.result.value as? [String: AnyObject] {
                     if let b = obj["base"] as? String {
@@ -29,14 +30,18 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, 
         
                         self.balance = [self.base: 1000] // reset rate
                         
-                        for (key, value) in r {
-                            self.balance[key] = value.floatValue
+                        for (key, _) in r {
+                            self.currencies.append(key)
+                            self.balance[key] = 0
                         }
                     }
                 }
             }
             
-            self.collectionView.reloadData()
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()
+                self.pickerView.reloadAllComponents()
+            }
         })
     }
     
