@@ -2,6 +2,7 @@
 CurrencyExchanger Sample
 
 ### Change Log
+* Add missed requirements
 * Allow users to add new rules:
 * Update conversion fee message
 
