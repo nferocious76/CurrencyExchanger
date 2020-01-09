@@ -11,3 +11,5 @@ every tenth conversion is free
 # Add Minimum
 conversion of up to 200 Euros is free of charge etc.
 
+# Icons
+* https://www.flaticon.com/
