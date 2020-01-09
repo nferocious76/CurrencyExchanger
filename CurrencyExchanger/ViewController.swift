@@ -31,6 +31,8 @@ class ViewController: UIViewController, ExchangerViewDelegate, UIPickerViewDeleg
     var base: String = "EUR"
     var rates: [String: NSNumber] = [:]
     var currencies: [String] = ["EUR"]
+    var exchangeRule: Int = 0 // default to 5: The first five currency exchanges are free of charge but afterwards they're charged 0.7% of the currency being traded.
+    var exchangeMin: Float = 0.0
     var exchangeCount: Int = 0 // commission fee: 0.7%
     var isFirstLoad: Bool = true
     
@@ -38,26 +40,104 @@ class ViewController: UIViewController, ExchangerViewDelegate, UIPickerViewDeleg
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
+        addNavButton()
         prepareUI()
-        loadCurrency()
+//        loadCurrency()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         // create polling every 5 seconds
-        Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { _ in
-            self.loadCurrency()
-        }
+//        Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { _ in
+//            self.loadCurrency()
+//        }
 
 //        test
-//        balance = ["EUR": 1000, "USD": 0, "CAD": 0, "AUD": 0]
-//        rates = ["EUR": 1.4525, "USD": 137.3, "CAD": 0.85215, "AUD": 1.6119]
-//        currencies = ["EUR", "USD", "CAD", "AUD"]
+        balance = ["EUR": 1000, "USD": 0, "CAD": 0, "AUD": 0]
+        rates = ["EUR": 1.4525, "USD": 137.3, "CAD": 0.85215, "AUD": 1.6119]
+        currencies = ["EUR", "USD", "CAD", "AUD"]
         
-//        collectionView.reloadData()
+        collectionView.reloadData()
     }
 
+    // provide for the possibility of expanding the calculation of a more flexible commission. It is possible to come up with various new rules, for example - every tenth conversion is free, conversion of up to 200 Euros is free of charge etc.
+    func addNavButton() {
+        
+        // 
+        let addRule = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(ViewController.addRule))
+        navigationItem.rightBarButtonItem = addRule
+        navigationItem.title = "Currency Converter"
+    }
+    
+    @objc func addRule() {
+        
+
+        let alert = alertWithActions(title: "Add new rule", message: "Select rule to add", actions: [], style: .actionSheet)
+        let addLimit = UIAlertAction(title: "Add Limit", style: .default) { (action) in
+            // add exchange count for a free conversion
+            
+            let alert = self.alertWithActions(title: "Add Rule", message: "Set conversion count for a free of commission", actions: [], style: .alert)
+            alert.addTextField { (tf) in
+                tf.placeholder = "Add Limit"
+                tf.keyboardType = .numberPad
+            }
+            
+            let limit = UIAlertAction(title: "Add Limit", style: .default) { (a) in
+                
+                guard let tf = alert.textFields?[0], let l = tf.text else { return }
+                self.exchangeRule = Int(l) ?? 0
+            }
+            alert.addAction(limit)
+            
+            let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            alert.addAction(cancel)
+            
+            self.present(alert, animated: true, completion: nil)
+        }
+        alert.addAction(addLimit)
+        
+        let addMin = UIAlertAction(title: "Add Minimum", style: .default) { (action) in
+            // add exchange minimum amount for a free conversion
+            
+            let alert = self.alertWithActions(title: "Add Minimum", message: "Set minimum conversion for a free of commission", actions: [], style: .alert)
+            alert.addTextField { (tf) in
+                tf.placeholder = "Add Minimum"
+                tf.keyboardType = .numberPad
+            }
+            
+            let min = UIAlertAction(title: "Add Minimum", style: .default) { (a) in
+                
+                guard let tf = alert.textFields?[0], let m = tf.text else { return }
+                self.exchangeMin = Float(m) ?? 0
+            }
+            alert.addAction(min)
+            
+            let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            alert.addAction(cancel)
+            
+            self.present(alert, animated: true, completion: nil)
+
+        }
+        alert.addAction(addMin)
+        
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alert.addAction(cancel)
+        
+        present(alert, animated: true, completion: nil)
+    }
+    
+    fileprivate func alertWithActions(title: String?, message: String?, actions: [UIAlertAction], style: UIAlertController.Style = .alert) -> UIAlertController {
+        
+        let alert = UIAlertController(title: title, message: message, preferredStyle: style)
+        
+        for a in actions {
+            alert.addAction(a)
+        }
+        
+        return alert
+    }
+    
     func prepareUI() {
         
         sellView.backgroundColor = .white
@@ -116,12 +196,26 @@ class ViewController: UIViewController, ExchangerViewDelegate, UIPickerViewDeleg
                     return showAlert(title: "Error", message: "Convertion failed")
                 }
                 
+                // check if exchangeRule is hit for a free conversion rate -- or proceed to free for first 5 conversion
+                var addCommission = true
+                
+                if exchangeMin > 0, f >= exchangeMin { // check if exchange min is hit for a free conversion
+                    addCommission = false
+                }
+                else if exchangeRule > 0, exchangeCount % exchangeRule == 0 { // every exchange count hit -- free of conversion
+                    addCommission = false
+                }
+                else{ // set default conversion fee
+                     addCommission = exchangeCount > 5
+                }
+                
                 let converted = f * r
-                let message = exchangeCount > 5 ? "You have converted \(sell.rate) \(sell.currency) to \(converted) \(receive.currency). Commission Fee - 0.70 EUR." : "You have converted \(sell.rate) \(sell.currency) to \(converted) \(receive.currency)"
+                let conversionFee = f * 0.7
+                let message = addCommission ? "You have converted \(sell.rate) \(sell.currency) to \(converted) \(receive.currency). Commission Fee - \(conversionFee) EUR." : "You have converted \(sell.rate) \(sell.currency) to \(converted) \(receive.currency)"
                 
                 // update balance
                 let b = balance[sell.currency]!
-                let newBal = exchangeCount > 5 ? b - (f + f * 0.7) : b - f
+                let newBal = addCommission ? b - (f + conversionFee) : b - f
                 balance[sell.currency] = newBal
                 
                 if let bal = balance[receive.currency] {
