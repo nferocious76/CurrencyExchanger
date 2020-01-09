@@ -124,7 +124,7 @@ class ExchangerView: UIView, UITextFieldDelegate {
     
     var rate: String {
         set (r) {
-            inputTF.text = prefix.count > 0 ? "\(prefix) \(r)" : r
+            inputTF.text = prefix.count > 0 && r.count > 0 ? "\(prefix) \(r)" : r
         }
         get {
             return inputTF.text ?? ""

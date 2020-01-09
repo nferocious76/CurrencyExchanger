@@ -57,7 +57,7 @@ class ViewController: UIViewController, ExchangerViewDelegate, UIPickerViewDeleg
 //        balance = ["EUR": 1000, "USD": 0, "CAD": 0, "AUD": 0]
 //        rates = ["EUR": 1.4525, "USD": 137.3, "CAD": 0.85215, "AUD": 1.6119]
 //        currencies = ["EUR", "USD", "CAD", "AUD"]
-//        
+//
 //        collectionView.reloadData()
     }
 
@@ -241,6 +241,8 @@ class ViewController: UIViewController, ExchangerViewDelegate, UIPickerViewDeleg
             if let r = rates[receive.currency]?.floatValue {
                 receive.rate = "\(f * r)"
             }
+        }else{
+            receive.rate = ""
         }
     }
     
