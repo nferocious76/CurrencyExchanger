@@ -42,23 +42,23 @@ class ViewController: UIViewController, ExchangerViewDelegate, UIPickerViewDeleg
         
         addNavButton()
         prepareUI()
-//        loadCurrency()
+        loadCurrency()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         // create polling every 5 seconds
-//        Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { _ in
-//            self.loadCurrency()
-//        }
+        Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { _ in
+            self.loadCurrency()
+        }
 
 //        test
-        balance = ["EUR": 1000, "USD": 0, "CAD": 0, "AUD": 0]
-        rates = ["EUR": 1.4525, "USD": 137.3, "CAD": 0.85215, "AUD": 1.6119]
-        currencies = ["EUR", "USD", "CAD", "AUD"]
-        
-        collectionView.reloadData()
+//        balance = ["EUR": 1000, "USD": 0, "CAD": 0, "AUD": 0]
+//        rates = ["EUR": 1.4525, "USD": 137.3, "CAD": 0.85215, "AUD": 1.6119]
+//        currencies = ["EUR", "USD", "CAD", "AUD"]
+//        
+//        collectionView.reloadData()
     }
 
     // provide for the possibility of expanding the calculation of a more flexible commission. It is possible to come up with various new rules, for example - every tenth conversion is free, conversion of up to 200 Euros is free of charge etc.
