@@ -5,8 +5,9 @@ CurrencyExchanger Sample
 * Allow users to add new rules:
 * Update conversion fee message
 
-# every tenth conversion is free
-``` Add Limit
+# Add Limit
+every tenth conversion is free
 
-# conversion of up to 200 Euros is free of charge etc.
-``` Add Minimum
+# Add Minimum
+conversion of up to 200 Euros is free of charge etc.
+
