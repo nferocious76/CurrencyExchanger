@@ -150,7 +150,7 @@ class ViewController: UIViewController, ExchangerViewDelegate, UIPickerViewDeleg
         
         receive.delegate = self
         receive.pinToSuperView(view: receiveiew)
-        receive.set(#imageLiteral(resourceName: "arrow-down"), iconBGColor: .green, title: "Receive", currency: base)
+        receive.set(#imageLiteral(resourceName: "arrow-down"), iconBGColor: .green, title: "Receive", inputPrefix: "+", inputColor: .green, currency: base)
         receive.setDisabled(currency: false)
         
         collectionView.delegate = self

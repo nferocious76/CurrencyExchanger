@@ -25,6 +25,8 @@ class ExchangerView: UIView, UITextFieldDelegate {
     @IBOutlet weak var dropdownButton: UIButton!
     @IBOutlet weak var separatorLineView: UIView!
     
+    fileprivate var prefix: String = ""
+    
     weak var delegate: ExchangerViewDelegate?
     
     class func instance() -> ExchangerView? {
@@ -100,12 +102,15 @@ class ExchangerView: UIView, UITextFieldDelegate {
         dropdownButton.isEnabled = !currency
     }
     
-    func set(_ icon: UIImage?, iconBGColor: UIColor = .white, title: String, currency c: String = "") {
+    func set(_ icon: UIImage?, iconBGColor: UIColor = .white, title: String, inputPrefix: String = "", inputColor color: UIColor = .black, inputPlaceholder: String? = "0", currency c: String = "") {
         
         iconView.image = icon
         iconView.backgroundColor = iconBGColor
         titleLbl.text = title
         currencyLbl.text = c
+        prefix = inputPrefix
+        inputTF.textColor = color
+        inputTF.placeholder = inputPlaceholder
     }
     
     var currency: String {
@@ -119,7 +124,7 @@ class ExchangerView: UIView, UITextFieldDelegate {
     
     var rate: String {
         set (r) {
-            inputTF.text = r
+            inputTF.text = prefix.count > 0 ? "\(prefix) \(r)" : r
         }
         get {
             return inputTF.text ?? ""
