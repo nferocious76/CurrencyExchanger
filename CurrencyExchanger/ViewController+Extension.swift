@@ -91,9 +91,11 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, 
      
         let cur = currencies[indexPath.row]
         let bal = balance[cur] ?? 0
+        let handler = NSDecimalNumberHandler(roundingMode: .up, scale: 2, raiseOnExactness: false, raiseOnOverflow: false, raiseOnUnderflow: false, raiseOnDivideByZero: false)
+        let roundBal = NSDecimalNumber(decimal: bal).rounding(accordingToBehavior: handler)
         
         let c = cell as! CurrencyCVCell
-        c.balanceLbl.text = "\(bal) \(cur)"
+        c.balanceLbl.text = "\(roundBal) \(cur)"
     }
     
     func showAlert(title: String, message: String) {
