@@ -5,6 +5,7 @@ CurrencyExchanger Sample
 * Add missed requirements
 * Allow users to add new rules:
 * Update conversion fee message
+* Addressed bugs - conversion fee over balance, duplicate currency
 
 # Add Limit
 every tenth conversion is free
