@@ -27,13 +27,14 @@ class ViewController: UIViewController, ExchangerViewDelegate, UIPickerViewDeleg
     
     fileprivate var activeExchange: ExchangerView?
     
-    var balance: [String: Float] = ["EUR": 1000]
+    var balance: [String: Decimal] = ["EUR": 1000]
     var base: String = "EUR"
     var rates: [String: NSNumber] = [:]
     var currencies: [String] = ["EUR"]
     var exchangeRule: Int = 0 // default to 5: The first five currency exchanges are free of charge but afterwards they're charged 0.7% of the currency being traded.
-    var exchangeMin: Float = 0.0
+    var exchangeMin: Decimal = 0.0
     var exchangeCount: Int = 0 // commission fee: 0.7%
+    let commisionFee: Decimal = Decimal(0.7 / 100)
     var isFirstLoad: Bool = true
     
     override func viewDidLoad() {
@@ -109,7 +110,7 @@ class ViewController: UIViewController, ExchangerViewDelegate, UIPickerViewDeleg
             let min = UIAlertAction(title: "Add Minimum", style: .default) { (a) in
                 
                 guard let tf = alert.textFields?[0], let m = tf.text else { return }
-                self.exchangeMin = Float(m) ?? 0
+                self.exchangeMin = Decimal(string: m) ?? 0
             }
             alert.addAction(min)
             
@@ -185,14 +186,14 @@ class ViewController: UIViewController, ExchangerViewDelegate, UIPickerViewDeleg
         if sell.currency == receive.currency {
             return showAlert(title: "Error", message: "Can't convert to same currency")
         }
-        else if let balance = balance[sell.currency], Float(sell.rate) ?? 0 > balance {
+        else if let balance = balance[sell.currency], Decimal(string: sell.rate) ?? 0 > balance {
             return showAlert(title: "Error", message: "You don't have enough money")
         }
         else{
-            if let r = rates[receive.currency]?.floatValue {
+            if let r = rates[receive.currency]?.decimalValue {
                 exchangeCount += 1 // update exchange count
                 
-                guard let f = Float(sell.rate) else {
+                guard let f = Decimal(string: sell.rate) else {
                     return showAlert(title: "Error", message: "Convertion failed")
                 }
                 
@@ -210,12 +211,19 @@ class ViewController: UIViewController, ExchangerViewDelegate, UIPickerViewDeleg
                 }
                 
                 let converted = f * r
-                let conversionFee = f * 0.7
-                let message = addCommission ? "You have converted \(sell.rate) \(sell.currency) to \(converted) \(receive.currency). Commission Fee - \(conversionFee) EUR." : "You have converted \(sell.rate) \(sell.currency) to \(converted) \(receive.currency)"
+                let conversionFee = f * commisionFee
                 
                 // update balance
-                let b = balance[sell.currency]!
-                let newBal = addCommission ? b - (f + conversionFee) : b - f
+                let total = (f + conversionFee)
+                let tbalance = balance[sell.currency]!
+                
+                if total > tbalance { // check if balance will be negative after conversion
+                    return showAlert(title: "Error", message: "Convertion failed. You don't have enought money.")
+                }
+                
+                let message = addCommission ? "You have converted \(sell.rate) \(sell.currency) to \(converted) \(receive.currency). Commission Fee - \(conversionFee) EUR." : "You have converted \(sell.rate) \(sell.currency) to \(converted) \(receive.currency)"
+                
+                let newBal = addCommission ? tbalance - total : tbalance - f
                 balance[sell.currency] = newBal
                 
                 if let bal = balance[receive.currency] {
@@ -237,8 +245,8 @@ class ViewController: UIViewController, ExchangerViewDelegate, UIPickerViewDeleg
     func exchangerView(view: ExchangerView, didChangeRate rate: String, andCurrency currency: String) {
         
         // convert rate to receive
-        if let f = Float(rate) {
-            if let r = rates[receive.currency]?.floatValue {
+        if let f = Decimal(string: rate) {
+            if let r = rates[receive.currency]?.decimalValue {
                 receive.rate = "\(f * r)"
             }
         }else{
@@ -277,7 +285,7 @@ class ViewController: UIViewController, ExchangerViewDelegate, UIPickerViewDeleg
             exchange.currency = currency
             
             // convert
-            if let r = rates[currency]?.floatValue, let f = Float(sell.rate) {
+            if let r = rates[currency]?.decimalValue, let f = Decimal(string: sell.rate) {
                 exchange.rate = "\(f * r)"
             }
         }

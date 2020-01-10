@@ -20,6 +20,7 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, 
                 if let obj = data.result.value as? [String: AnyObject] {
                     if let b = obj["base"] as? String {
                         self.base = b
+                        self.currencies = [b] // reset currencies
                         
                         if self.isFirstLoad { // this is probably first load -- default value
                             self.balance = [b: 1000] // reset rate
@@ -31,9 +32,11 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, 
                     
                     if let r = obj["rates"] as? [String: NSNumber] {
                         self.rates = r
-
+                        
                         for (key, _) in r {
-                            self.currencies.append(key)
+                            if !self.currencies.contains(key) {
+                                self.currencies.append(key)
+                            }
                             
                             if self.isFirstLoad {
                                 self.balance[key] = 0
